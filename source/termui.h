@@ -86,11 +86,11 @@ size_t termui_insertf_text(Canvas *canvas, Pixel **pixels, size_t pixels_count, 
 /* Erase `pixels_count` pixels */
 size_t termui_erase(Canvas *canvas, Pixel **pixels, size_t pixels_count);
 
-/* Insert a continuos line of text `*text` to pixels `**pixels` array */
+/* Insert a continuous line of text `*text` to pixels `**pixels` array */
 size_t termui_insert_textl(Canvas *canvas, unsigned short start, const char *text);
-/* Insert a continuos line of formatted text `*text` to pixels `**pixels` array */
+/* Insert a continuous line of formatted text `*text` to pixels `**pixels` array */
 size_t termui_insertf_textl(Canvas *canvas, unsigned short start, const char *fmt, ...);
-/* Erase a continuos line of `pixels_count` pixels */
+/* Erase a continuous line of `pixels_count` pixels */
 size_t termui_erasel(Canvas *canvas, unsigned short start, unsigned short end);
 
 /* Add a symbolic child to the canvas `*parent` tree */
