@@ -16,4 +16,5 @@ Copy and paste `SOURCE_DIR/build/libtermui.a` somewhere in your project and add 
 ## Windows / Not Unix-like OSes
 ### Not officially supported. libtermui uses `unistd.h` and others unix-like libraries to get the things done. If you really want to use libtermui, try WSL or something. 
 
+---
 sorry for my bad english :) it's not my main language :>
