@@ -9,6 +9,7 @@
 #include <assert.h>
 #include <stdarg.h>
 #include <string.h>
+#include <errno.h>
 
 static struct winsize terminal_info;
 static struct _tracker tracker;
@@ -152,6 +153,7 @@ Canvas * termui_create_canvas(Pixel **pixels, size_t pixels_count) {
         tracker.canvas_count = 1;
     }
 
+
     tracker.all_canvas[tracker.canvas_count - 1] = canvas;
     tracker.canvas_count++;
 
@@ -175,15 +177,8 @@ void * termui_destroy_canvas(Canvas *canvas) {
         assert(false && "Assertion Message: Is termui initialized?");
     }
 
-    /* comment by: ottav1o | m10/d12/y24 - 00:18 UTC +0 */
-    /* wasting performance (and memory), but im too lazy to implement a better way to do it */
-    /* TODO: Refactor everything */
-    for (size_t i = 0; i < tracker.canvas_count; i++) {
-        if (canvas == tracker.all_canvas[i]) {
-            __tui_destroy_canvas(tracker.all_canvas[i]);
-            tracker.all_canvas[i] = NULL;
-        }
-    }
+    __tui_destroy_canvas(canvas);
+    canvas = NULL;
 }
 
 int termui_renderer_present(Display *display) {
@@ -345,4 +340,59 @@ size_t termui_erasel(Canvas *canvas, unsigned short start, unsigned short end) {
         canvas->pixels[start+i]->c = ' ';
 
     return len;
+}
+
+int termui_canvas_add_child(Canvas *parent, Canvas *child) {
+    assert(parent && "Assertion Message: ERROR: *parent is NULL");
+    assert(child && "Assertion Message: ERROR: *child is NULL");
+
+    /* possible memory leak if `parent->childs_count` is a false zero */
+    if (parent->childs == NULL || parent->childs_count == 0) {
+        parent->childs = malloc(sizeof(Canvas *));
+        if (parent->childs == NULL) {
+            fprintf(stderr, "ERROR: Cannot allocate sufficient memory for `parent->childs`: %s\n", strerror(errno));
+
+            return -1;
+        }
+        
+        parent->childs_count = 1;
+    }
+
+    parent->childs[parent->childs_count - 1] = child;
+    parent->childs_count++;
+
+
+    parent->childs = realloc(parent->childs, sizeof(Canvas *) * parent->childs_count);
+    if (parent->childs == NULL) {
+        fprintf(stderr, "ERROR: Cannot reallocate `parent->childs`: %s\n", strerror(errno));
+
+        parent->childs_count = 0;
+
+        return -1;
+    }
+
+    return 0;
+}
+
+int termui_canvas_remove_child(Canvas *parent, size_t index) {
+    assert(parent && "Assertion Message: *parent is NULL");
+    if (index >= parent->childs_count) {
+        fprintf(stderr, "Cannot remove canvas child: Index out of range.\n");
+        
+        return -1;
+    }
+    
+    parent->childs[index] = NULL;
+    parent->childs_count--;
+
+    parent->childs = realloc(parent->childs, sizeof(Canvas *) * parent->childs_count);
+    if (parent->childs == NULL) {
+        fprintf(stderr, "ERROR: Cannot reallocate `parent->childs`: %s\n", strerror(errno));
+
+        parent->childs_count = 0;
+
+        return -1;
+    }
+
+    return 0;
 }

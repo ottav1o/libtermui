@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-Canvas * __tui_create_canvas(Pixel **pixels, unsigned short pcount) {
+Canvas * __tui_create_canvas(Pixel **pixels, size_t pcount) {
     Canvas *canvas = malloc(sizeof(Canvas));
     if (canvas == NULL) {
         fprintf(stderr, "ERROR: Cannot allocate memory for canvas.\n");
@@ -15,6 +15,7 @@ Canvas * __tui_create_canvas(Pixel **pixels, unsigned short pcount) {
     canvas->pixels_count = pcount;
     canvas->childs = NULL;
     canvas->childs_count = 0;
+    canvas->parent = NULL;
 
     return canvas;
 }

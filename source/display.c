@@ -53,6 +53,8 @@ Display * __tui_create_display(unsigned short height, unsigned short width, cons
         display->main_canvas.pixels[i]->c = ' ';
     }
     display->main_canvas.pixels_count = display->pixels_count;
+    
+    display->main_canvas.parent = NULL;
 
     __tui_cursor_move(0, 0, &display->cursor);
 

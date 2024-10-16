@@ -45,4 +45,7 @@ size_t termui_insert_textl(Canvas *canvas, unsigned short start, const char *tex
 size_t termui_insertf_textl(Canvas *canvas, unsigned short start, const char *fmt, ...);
 size_t termui_erasel(Canvas *canvas, unsigned short start, unsigned short end);
 
+int termui_canvas_add_child(Canvas *parent, Canvas *child);
+int termui_canvas_remove_child(Canvas *parent, size_t index);
+
 #endif // __TERM_UI_H__

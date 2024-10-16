@@ -12,23 +12,29 @@ int main(void) {
         return 1;
     }
 
-    // Pixel **pixels = malloc(sizeof(Pixel *) * 12);
-    // for (size_t i = 0; i < 12; i++) {
-    //     pixels[i] = display->main_canvas.pixels[(i*display->width) + i * 4];
-    //     printf("%d\n", (i*display->width) + i * 4);
-    // }
+    Pixel **pixels = malloc(sizeof(Pixel *) * 13);
+    for (size_t i = display->main_canvas.pixels_count - 13, j = 0; i < display->main_canvas.pixels_count - 1; i++, j++)
+        pixels[j] = display->main_canvas.pixels[i];
 
     // termui_insert_text(&display->main_canvas, pixels, 12, "Hello World");
 
-    termui_insert_textl(&display->main_canvas, 0, "Hello World!");
+    Canvas *canv = termui_create_canvas(pixels, 13);
+    termui_canvas_add_child(&display->main_canvas, canv);
+
+    termui_insert_textl(canv, 0, "Hello World!");
+    puts("Hello");
     termui_insertf_textl(&display->main_canvas, 13, "This is a test: Terminal size: Rows: %d, Width: %d", display->height, display->width);
     termui_insert_textl(&display->main_canvas, 1*display->width, termui_version());
 
+    termui_canvas_remove_child(&display->main_canvas, display->main_canvas.childs_count - 1);
+
+    termui_destroy_canvas(canv);
     termui_renderer_present(display);
 
     getchar();  
 
     // termui_renderer_clear();
+
     puts(display->display_name);
     termui_close();
 

@@ -3,14 +3,17 @@
 
 #include "pixels.h"
 
+#include <stdio.h>
+
 typedef struct _canvas {
+    struct _canvas *parent;
     Pixel **pixels;
-    unsigned short pixels_count;
+    size_t pixels_count;
     struct _canvas **childs;
-    unsigned int childs_count;
+    size_t childs_count;
 } Canvas;
 
-Canvas * __tui_create_canvas(Pixel **pixels, unsigned short pcount);
+Canvas * __tui_create_canvas(Pixel **pixels, size_t pcount);
 void __tui_destroy_canvas(Canvas *canvas);
 
 #endif // __CANVAS_H__
