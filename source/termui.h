@@ -45,6 +45,7 @@
 
 #define TERMUI_LIB_VERSION "0.5.0-dev-release"
 
+/* Tracks all displays and canvas created. */
 struct _tracker {
     Display **all_displays;
     Canvas **all_canvas;
@@ -52,31 +53,49 @@ struct _tracker {
     size_t canvas_count;
 };
 
+/* Init function, get the terminal size and intialize the tracker */
 int termui_init(void);
+/* Close function, destroy all created canvas and displays and close */
 void termui_close(void);
 const char * termui_version(void);
 
+/* Create a new display and add it to the tracker. Wrapper for `__tui_create_display()` */
 Display * termui_create_display(unsigned short rows, unsigned short cols, const char *name);
+/* Delete `display` and removes it from the tracker. Wrapper for `__tui_destroy_display()` */
 void termui_destroy_display(Display *display);
 
+/* Create a new canvas with `**pixels` and `pixels_count` size and add it to the tracker. beware that if you provide a different pixel count probaly this will gonna crash. Wrapper for `__tui_create_canvas()` */
 Canvas * termui_create_canvas(Pixel **pixels, size_t pixels_count);
+/* Destroy `*canvas`, remove it from the tracker and deallocate memory for `**pixels`. Wrapper for `__tui_destroy_canvas()` */
 void * termui_destroy_canvas(Canvas *canvas);
 
+/* Render the `display->pixels` line by line to the STDOUT. Wrapper to `__tui_renderer_write()` */
 int termui_renderer_present(Display *display);
+/* Clear everything on the screen. Note: This function should not be used in the main loop before or after `termui_renderer_present()`. `termui_renderer_present()` already overwrite changes int the STDOUT.*/
 void termui_renderer_clear(void);
 
+/* Move `display->cursor` to row `row` and col `col`. Changes only apply on the next `__tui_renderer_write()` call */
 void termui_move_cursor(Display *display, unsigned short row, unsigned short col);
+/* Reset `display->cursor` to row 0 and col 0 "home". Changes only apply on the next `__tui_renderer_write()` call */
 void termui_reset_cursor(Display *display);
 
+/* Insert text `*text` to pixels `**pixels` array */
 size_t termui_insert_text(Canvas *canvas, Pixel **pixels, size_t pixels_count, const char *text);
+/* Insert formatted text `*text` to pixels `**pixels` array */
 size_t termui_insertf_text(Canvas *canvas, Pixel **pixels, size_t pixels_count, const char *fmt, ...);
+/* Erase `pixels_count` pixels */
 size_t termui_erase(Canvas *canvas, Pixel **pixels, size_t pixels_count);
 
+/* Insert a continuos line of text `*text` to pixels `**pixels` array */
 size_t termui_insert_textl(Canvas *canvas, unsigned short start, const char *text);
+/* Insert a continuos line of formatted text `*text` to pixels `**pixels` array */
 size_t termui_insertf_textl(Canvas *canvas, unsigned short start, const char *fmt, ...);
+/* Erase a continuos line of `pixels_count` pixels */
 size_t termui_erasel(Canvas *canvas, unsigned short start, unsigned short end);
 
+/* Add a symbolic child to the canvas `*parent` tree */
 int termui_canvas_add_child(Canvas *parent, Canvas *child);
+/* Remove a symbolic child `parent->childs[index]` of the canvas `*parent` tree */
 int termui_canvas_remove_child(Canvas *parent, size_t index);
 
 #endif // __TERM_UI_H__
