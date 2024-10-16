@@ -18,6 +18,10 @@ INC_PATH = /usr/local/include/TERMUI
 
 all: $(LIB_TARGET) examples
 
+info:
+	@echo -e "$(YELLOW) C Compiler:$(RESET) $(GREEN)$(CC) $(RESET)"
+	@echo -e "$(YELLOW) Archiver:$(RESET) $(GREEN)$(AR) $(RESET)"
+
 lib: $(LIB_TARGET)
 
 install: $(LIB_TARGET)
@@ -43,7 +47,7 @@ $(BUILD_DIR):
 $(LIB_TARGET): $(LIB_OBJECTS) | $(BUILD_DIR)
 	$(AR) rcs $@ $^
 
-$(BUILD_DIR)/%.o: ./source/%.c $(LIB_HEADERS) | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: ./source/%.c $(LIB_HEADERS) | $(BUILD_DIR) info
 	@echo -e "$(RED)Compiling$(RESET) $(YELLOW) $< $(RESET) ---> $(GREEN) $@ $(RESET)"
 	@$(CC) -c $< -o $@
 
