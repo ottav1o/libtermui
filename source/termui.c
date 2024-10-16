@@ -126,7 +126,7 @@ Display * termui_create_display(unsigned short rows, unsigned short cols, const 
     if (tracker.display_count == 0 || tracker.all_displays == NULL) {
         tracker.all_displays = malloc(sizeof(Display *));
         if (tracker.all_displays == NULL) {
-            fprintf(stderr, "ERROR: Cannot allocate necessary memory for displays pointer.\n");
+            fprintf(stderr, "ERROR: Cannot allocate necessary memory for displays pointer: %s\n", strerror(errno));
 
             return NULL;
         }
@@ -177,7 +177,7 @@ Canvas * termui_create_canvas(Pixel **pixels, size_t pixels_count) {
 
     Canvas *canvas = __tui_create_canvas(pixels, pixels_count);
     if (canvas == NULL) {
-        fprintf(stderr, "ERROR: Cannot allocate necessary memory for canvas.\n");
+        fprintf(stderr, "ERROR: Cannot allocate necessary memory for canvas: %s\n", strerror(errno));
         
         return NULL;
     }
@@ -185,7 +185,7 @@ Canvas * termui_create_canvas(Pixel **pixels, size_t pixels_count) {
     if (tracker.all_canvas == NULL || tracker.canvas_count == 0) {
         tracker.all_canvas = malloc(sizeof(Canvas *));
         if (tracker.all_canvas == NULL) {
-            fprintf(stderr, "ERROR: Cannot allocate necessary memory for tracker canvas pointer.\nn");
+            fprintf(stderr, "ERROR: Cannot allocate necessary memory for tracker canvas pointer.: %snn", strerror(errno));
 
             free(canvas);
             canvas == NULL;
@@ -202,7 +202,7 @@ Canvas * termui_create_canvas(Pixel **pixels, size_t pixels_count) {
 
     tracker.all_canvas = realloc(tracker.all_canvas, sizeof(Canvas *) * tracker.canvas_count);
     if (tracker.all_canvas == NULL) {
-        fprintf(stderr, "ERROR: Cannot allocate necessary memory for tracker canvas pointer.\n");
+        fprintf(stderr, "ERROR: Cannot allocate necessary memory for tracker canvas pointer: %s\n", strerror(errno));
 
         free(canvas);
         canvas = NULL;
