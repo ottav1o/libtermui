@@ -43,7 +43,7 @@
 #define TERMUI_AUTODETECT 0
 #define DEFAULT_RENDERER stdout
 
-#define TERMUI_LIB_VERSION "0.5.0-dev-release"
+#define TERMUI_LIB_VERSION "0.6.0-dev-release"
 
 /* Tracks all displays and canvas created. */
 struct _tracker {
