@@ -52,10 +52,11 @@ int main(void) {
     Canvas *canv = termui_create_canvas(pixels, 13);
     termui_canvas_add_child(&display->main_canvas, canv);
 
-    termui_insert_textl(canv, 0, "Hello World!");
+    termui_insert_textl(&display->main_canvas, 0, "Hello World!");
     puts("Hello");
     termui_insertf_textl(&display->main_canvas, 13, "This is a test: Terminal size: Rows: %d, Width: %d", display->height, display->width);
     termui_insert_textl(&display->main_canvas, 1*display->width, termui_version());
+    termui_insert_text(&display->main_canvas, canv->pixels, 10, "It works!");
 
     termui_canvas_remove_child(&display->main_canvas, display->main_canvas.childs_count - 1);
 
