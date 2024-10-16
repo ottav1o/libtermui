@@ -93,9 +93,4 @@ size_t termui_insertf_textl(Canvas *canvas, unsigned short start, const char *fm
 /* Erase a continuous line of `pixels_count` pixels */
 size_t termui_erasel(Canvas *canvas, unsigned short start, unsigned short end);
 
-/* Add a symbolic child to the canvas `*parent` tree */
-int termui_canvas_add_child(Canvas *parent, Canvas *child);
-/* Remove a symbolic child `parent->childs[index]` of the canvas `*parent` tree */
-int termui_canvas_remove_child(Canvas *parent, size_t index);
-
 #endif // __TERM_UI_H__

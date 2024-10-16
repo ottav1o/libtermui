@@ -44,9 +44,6 @@ Canvas * __tui_create_canvas(Pixel **pixels, size_t pcount) {
 
     canvas->pixels = pixels;
     canvas->pixels_count = pcount;
-    canvas->childs = NULL;
-    canvas->childs_count = 0;
-    canvas->parent = NULL;
 
     return canvas;
 }

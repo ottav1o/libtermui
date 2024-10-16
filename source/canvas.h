@@ -37,11 +37,8 @@
 #include <stdio.h>
 
 typedef struct _canvas {
-    struct _canvas *parent;
     Pixel **pixels;
     size_t pixels_count;
-    struct _canvas **childs;
-    size_t childs_count;
 } Canvas;
 
 Canvas * __tui_create_canvas(Pixel **pixels, size_t pcount);

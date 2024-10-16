@@ -76,16 +76,12 @@ Display * __tui_create_display(unsigned short height, unsigned short width, cons
         return NULL;
     }
 
-    display->main_canvas.childs = NULL;
-    display->main_canvas.childs_count = 0;
-
     for (size_t i = 0; i < display->pixels_count; i++) {
         display->main_canvas.pixels[i] = &display->display_pixels[i];
         display->main_canvas.pixels[i]->c = ' ';
     }
     display->main_canvas.pixels_count = display->pixels_count;
-    
-    display->main_canvas.parent = NULL;
+
 
     __tui_cursor_move(0, 0, &display->cursor);
 
