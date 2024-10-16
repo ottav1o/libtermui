@@ -52,6 +52,18 @@ void termui_close(void) {
         tracker.all_displays = NULL;
     }
 
+    if (tracker.all_canvas != NULL) {
+        for (size_t i = 0; i < tracker.canvas_count; i++) {
+            if (tracker.all_canvas[i]) {
+                __tui_destroy_canvas(tracker.all_canvas[i]);
+                tracker.all_canvas[i] = NULL;
+            }
+        }
+
+        free(tracker.all_canvas);
+        tracker.all_canvas = NULL;
+    }
+
     fprintf(DEFAULT_RENDERER, "\033[2J");
     fprintf(DEFAULT_RENDERER, "\033[0;0H");
 }
@@ -177,7 +189,15 @@ void * termui_destroy_canvas(Canvas *canvas) {
         assert(false && "Assertion Message: Is termui initialized?");
     }
 
-    __tui_destroy_canvas(canvas);
+    // wasting memory
+    // FIXME: not waste memory
+    for (size_t i = 0; i < tracker.canvas_count; i++) {
+        if (canvas == tracker.all_canvas[i]) {
+            __tui_destroy_canvas(tracker.all_canvas[i]);
+            tracker.all_canvas[i] = NULL;
+        }
+    }
+
     canvas = NULL;
 }
 
