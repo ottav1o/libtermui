@@ -53,7 +53,7 @@ struct _tracker {
     size_t canvas_count;
 };
 
-/* Init function, get the terminal size and intialize the tracker */
+/* Init function, get the terminal size and intialize the tracker. Returns a non zero value on failure */
 int termui_init(void);
 /* Close function, destroy all created canvas and displays and close */
 void termui_close(void);
@@ -69,7 +69,7 @@ Canvas * termui_create_canvas(Pixel **pixels, size_t pixels_count);
 /* Destroy `*canvas`, remove it from the tracker and deallocate memory for `**pixels`. Wrapper for `__tui_destroy_canvas()` */
 void * termui_destroy_canvas(Canvas *canvas);
 
-/* Render the `display->pixels` line by line to the STDOUT. Wrapper to `__tui_renderer_write()` */
+/* Render the `display->pixels` line by line to the STDOUT. Wrapper to `__tui_renderer_write()`. Returns a non zero value on failure */
 int termui_renderer_present(Display *display);
 /* Clear everything on the screen. Note: This function should not be used in the main loop before or after `termui_renderer_present()`. `termui_renderer_present()` already overwrite changes int the STDOUT.*/
 void termui_renderer_clear(void);
@@ -81,16 +81,16 @@ void termui_reset_cursor(Display *display);
 
 /* Insert text `*text` to pixels `**pixels` array */
 size_t termui_insert_text(Canvas *canvas, Pixel **pixels, size_t pixels_count, const char *text);
-/* Insert formatted text `*text` to pixels `**pixels` array */
+/* Insert formatted text `*text` to pixels `**pixels` array. Returns a negative value on failure */
 size_t termui_insertf_text(Canvas *canvas, Pixel **pixels, size_t pixels_count, const char *fmt, ...);
-/* Erase `pixels_count` pixels */
+/* Erase `pixels_count` pixels. Returns a negative value on failure */
 size_t termui_erase(Canvas *canvas, Pixel **pixels, size_t pixels_count);
 
-/* Insert a continuous line of text `*text` to pixels `**pixels` array */
+/* Insert a continuous line of text `*text` to pixels `**pixels` array. Returns a negative value on failure */
 size_t termui_insert_textl(Canvas *canvas, unsigned short start, const char *text);
-/* Insert a continuous line of formatted text `*text` to pixels `**pixels` array */
+/* Insert a continuous line of formatted text `*text` to pixels `**pixels` array. Returns a negative value on failure */
 size_t termui_insertf_textl(Canvas *canvas, unsigned short start, const char *fmt, ...);
-/* Erase a continuous line of `pixels_count` pixels */
+/* Erase a continuous line of `pixels_count` pixels. Returns a negative value on failure */
 size_t termui_erasel(Canvas *canvas, unsigned short start, unsigned short end);
 
 #endif // __TERM_UI_H__

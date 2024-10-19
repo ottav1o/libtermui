@@ -148,6 +148,7 @@ Display * termui_create_display(unsigned short rows, unsigned short cols, const 
 
         return NULL;
     }
+    tracker.all_displays[tracker.display_count - 1] = NULL;
 
     return display;
 }
@@ -232,6 +233,7 @@ void * termui_destroy_canvas(Canvas *canvas) {
     canvas = NULL;
 }
 
+/* Returns a non-zero value in case of failure. */
 int termui_renderer_present(Display *display) {
     assert(display && "Assertion Message: Display is NULL.");
     
@@ -247,6 +249,11 @@ void termui_renderer_clear(void) {
 
 void termui_move_cursor(Display *display, unsigned short row, unsigned short col) {
     assert(display && "Assertion Message: *display is NULL");
+    if (row >=  display->height || col >= display->width) {
+        fprintf(stderr, "ERROR: Cannot move cursor to row %d column %d: Index out of range.\n", row, col);
+        return;
+    }
+
     __tui_cursor_move(row, col, &display->cursor);
 }
 
