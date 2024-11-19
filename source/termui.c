@@ -27,7 +27,7 @@
  *    CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  *    OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  *    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ */
 
 #define _XOPEN_SOURCE 500
 
@@ -46,8 +46,10 @@ static struct winsize terminal_info;
 static struct _tracker tracker;
 static bool __is_termui_initialized = false;
 
-int termui_init(void) {
-    if (__is_termui_initialized) {
+int termui_init(void)
+{
+    if (__is_termui_initialized)
+    {
         fprintf(stderr, "ERROR: termui is alreaady initialized.\n");
         return -1;
     }
@@ -63,17 +65,22 @@ int termui_init(void) {
     return 0;
 }
 
-void termui_close(void) {
-    if (!__is_termui_initialized) {
+void termui_close(void)
+{
+    if (!__is_termui_initialized)
+    {
         fprintf(stderr, "ERROR: termui is not initalized.\n");
         assert(false && "Assertion Message: Is termui initialized?");
     }
 
     __is_termui_initialized = false;
 
-    if (tracker.all_displays != NULL) {
-        for (size_t i = 0; i < tracker.display_count; i++) {
-            if (tracker.all_displays[i]) {
+    if (tracker.all_displays != NULL)
+    {
+        for (size_t i = 0; i < tracker.display_count; i++)
+        {
+            if (tracker.all_displays[i])
+            {
                 __tui_destroy_display(tracker.all_displays[i]);
                 tracker.all_displays[i] = NULL;
             }
@@ -83,9 +90,12 @@ void termui_close(void) {
         tracker.all_displays = NULL;
     }
 
-    if (tracker.all_canvas != NULL) {
-        for (size_t i = 0; i < tracker.canvas_count; i++) {
-            if (tracker.all_canvas[i]) {
+    if (tracker.all_canvas != NULL)
+    {
+        for (size_t i = 0; i < tracker.canvas_count; i++)
+        {
+            if (tracker.all_canvas[i])
+            {
                 __tui_destroy_canvas(tracker.all_canvas[i]);
                 tracker.all_canvas[i] = NULL;
             }
@@ -99,33 +109,41 @@ void termui_close(void) {
     fprintf(DEFAULT_RENDERER, "\033[0;0H");
 }
 
-const char * termui_version(void) {
+const char * termui_version(void)
+{
     return TERMUI_LIB_VERSION;
 }
 
-Display * termui_create_display(unsigned short rows, unsigned short cols, const char *name) {
-    if (!__is_termui_initialized) {
+Display * termui_create_display(unsigned short rows, unsigned short cols, const char *name)
+{
+    if (!__is_termui_initialized)
+    {
         fprintf(stderr, "ERROR: termui is not initalized.\n");
         assert(false && "Assertion Message: Is termui initialized?");
     }
 
-    if (rows == TERMUI_AUTODETECT) {
+    if (rows == TERMUI_AUTODETECT)
+    {
         rows = terminal_info.ws_row;
     }
-    
-    if (cols == TERMUI_AUTODETECT) {
+
+    if (cols == TERMUI_AUTODETECT)
+    {
         cols = terminal_info.ws_col;
     }
-    
+
     Display *display = __tui_create_display(rows, cols, name);
-    if (display == NULL) {
+    if (display == NULL)
+    {
         fprintf(stderr, "ERROR: Cannot allocate necesary memory for display.\n");
         return NULL;
     }
 
-    if (tracker.display_count == 0 || tracker.all_displays == NULL) {
+    if (tracker.display_count == 0 || tracker.all_displays == NULL)
+    {
         tracker.all_displays = malloc(sizeof(Display *));
-        if (tracker.all_displays == NULL) {
+        if (tracker.all_displays == NULL)
+        {
             fprintf(stderr, "ERROR: Cannot allocate necessary memory for displays pointer: %s\n", strerror(errno));
 
             return NULL;
@@ -138,7 +156,8 @@ Display * termui_create_display(unsigned short rows, unsigned short cols, const 
     tracker.display_count++;
 
     tracker.all_displays = realloc(tracker.all_displays, sizeof(Display *) * tracker.display_count);
-    if (tracker.all_displays == NULL) {
+    if (tracker.all_displays == NULL)
+    {
         fprintf(stderr, "ERROR: Cannot add display to display tracker: Failed to allocate memory for display pointer.\n");
 
         __tui_destroy_display(display);
@@ -153,8 +172,10 @@ Display * termui_create_display(unsigned short rows, unsigned short cols, const 
     return display;
 }
 
-void termui_destroy_display(Display *display) {
-    if (!__is_termui_initialized) {
+void termui_destroy_display(Display *display)
+{
+    if (!__is_termui_initialized)
+    {
         fprintf(stderr, "ERROR: termui is not initalized.\n");
         assert(false && "Assertion Message: Is termui initialized?");
     }
@@ -162,30 +183,37 @@ void termui_destroy_display(Display *display) {
     /* comment by: ottav1o | m10/d12/y24 - 23:44 UTC +0 */
     /* wasting performance (and memory), but im too lazy to implement a better way to do it */
     /* TODO: Refactor everything */
-    for (size_t i = 0; i < tracker.display_count; i++) {
-        if (display == tracker.all_displays[i]) {
+    for (size_t i = 0; i < tracker.display_count; i++)
+    {
+        if (display == tracker.all_displays[i])
+        {
             __tui_destroy_display(tracker.all_displays[i]);
             tracker.all_displays[i] = NULL;
         }
     }
 }
 
-Canvas * termui_create_canvas(Pixel **pixels, size_t pixels_count) {
-    if (!__is_termui_initialized) {
+Canvas * termui_create_canvas(Pixel **pixels, size_t pixels_count)
+{
+    if (!__is_termui_initialized)
+    {
         fprintf(stderr, "ERROR: termui is not initalized.\n");
         assert(false && "Assertion Message: Is termui initialized?");
     }
 
     Canvas *canvas = __tui_create_canvas(pixels, pixels_count);
-    if (canvas == NULL) {
+    if (canvas == NULL)
+    {
         fprintf(stderr, "ERROR: Cannot allocate necessary memory for canvas: %s\n", strerror(errno));
-        
+
         return NULL;
     }
 
-    if (tracker.all_canvas == NULL || tracker.canvas_count == 0) {
+    if (tracker.all_canvas == NULL || tracker.canvas_count == 0)
+    {
         tracker.all_canvas = malloc(sizeof(Canvas *));
-        if (tracker.all_canvas == NULL) {
+        if (tracker.all_canvas == NULL)
+        {
             fprintf(stderr, "ERROR: Cannot allocate necessary memory for tracker canvas pointer.: %snn", strerror(errno));
 
             free(canvas);
@@ -193,16 +221,16 @@ Canvas * termui_create_canvas(Pixel **pixels, size_t pixels_count) {
 
             return NULL;
         }
-        
+
         tracker.canvas_count = 1;
     }
-
 
     tracker.all_canvas[tracker.canvas_count - 1] = canvas;
     tracker.canvas_count++;
 
     tracker.all_canvas = realloc(tracker.all_canvas, sizeof(Canvas *) * tracker.canvas_count);
-    if (tracker.all_canvas == NULL) {
+    if (tracker.all_canvas == NULL)
+    {
         fprintf(stderr, "ERROR: Cannot allocate necessary memory for tracker canvas pointer: %s\n", strerror(errno));
 
         free(canvas);
@@ -215,16 +243,20 @@ Canvas * termui_create_canvas(Pixel **pixels, size_t pixels_count) {
     return canvas;
 }
 
-void * termui_destroy_canvas(Canvas *canvas) {
-    if (!__is_termui_initialized) {
+void * termui_destroy_canvas(Canvas *canvas)
+{
+    if (!__is_termui_initialized)
+    {
         fprintf(stderr, "ERROR: termui is not initalized.\n");
         assert(false && "Assertion Message: Is termui initialized?");
     }
 
     // wasting memory
     // FIXME: not waste memory
-    for (size_t i = 0; i < tracker.canvas_count; i++) {
-        if (canvas == tracker.all_canvas[i]) {
+    for (size_t i = 0; i < tracker.canvas_count; i++)
+    {
+        if (canvas == tracker.all_canvas[i])
+        {
             __tui_destroy_canvas(tracker.all_canvas[i]);
             tracker.all_canvas[i] = NULL;
         }
@@ -234,22 +266,26 @@ void * termui_destroy_canvas(Canvas *canvas) {
 }
 
 /* Returns a non-zero value in case of failure. */
-int termui_renderer_present(Display *display) {
+int termui_renderer_present(Display *display)
+{
     assert(display && "Assertion Message: Display is NULL.");
-    
+
     termui_reset_cursor(display);
     __tui_renderer_write(display, DEFAULT_RENDERER);
 
     return 0;
 }
 
-void termui_renderer_clear(void) {
+void termui_renderer_clear(void)
+{
     __tui_renderer_clear(DEFAULT_RENDERER);
 }
 
-void termui_move_cursor(Display *display, unsigned short row, unsigned short col) {
+void termui_move_cursor(Display *display, unsigned short row, unsigned short col)
+{
     assert(display && "Assertion Message: *display is NULL");
-    if (row >=  display->height || col >= display->width) {
+    if (row >= display->height || col >= display->width)
+    {
         fprintf(stderr, "ERROR: Cannot move cursor to row %d column %d: Index out of range.\n", row, col);
         return;
     }
@@ -257,26 +293,34 @@ void termui_move_cursor(Display *display, unsigned short row, unsigned short col
     __tui_cursor_move(row, col, &display->cursor);
 }
 
-void termui_reset_cursor(Display *display) {
+void termui_reset_cursor(Display *display)
+{
     assert(display && "Assertion Message: *display is NULL");
     __tui_cursor_move(0, 0, &display->cursor);
 }
 
-size_t termui_insert_text(Canvas *canvas, Pixel **pixels, size_t pixels_count, const char *text) {
+size_t termui_insert_text(Canvas *canvas, int index[], size_t pixels_count, const char *text)
+{
     assert(canvas && "Assertion Message: *canvas is NULL");
-    assert(pixels && "Assertion Message: **pixels is NULL");
     assert(text && "Assertion Message: *text is NULL");
 
     size_t len = strlen(text);
     for (size_t i = 0; i < pixels_count && i < len; i++)
-        pixels[i]->c = text[i];
+    {
+        if (index[i] >= canvas->pixels_count)
+        {
+            fprintf(stderr, "Cannot set pixel %d to \"%c\": Index out of range", index[i], text[i]);
+            return -1;
+        }
+        canvas->pixels[index[i]]->c = text[i];
+    }
 
     return len;
 }
 
-size_t termui_insertf_text(Canvas *canvas, Pixel **pixels, size_t pixels_count, const char *fmt, ...) {
+size_t termui_insertf_text(Canvas *canvas, int index[], size_t pixels_count, const char *fmt, ...)
+{
     assert(canvas && "Assertion Message: *canvas is NULL");
-    assert(pixels && "Assertion Message: **pixels is NULL");
     assert(fmt && "Assertion Message: *fmt is NULL");
 
     va_list args;
@@ -288,18 +332,95 @@ size_t termui_insertf_text(Canvas *canvas, Pixel **pixels, size_t pixels_count, 
 
     lenght = vsnprintf(buffer, sizeof(buffer), fmt, args);
 
-    if (lenght < sizeof(buffer)) {
+    if (lenght < sizeof(buffer))
+    {
         text = strdup(buffer);
-    
-    } else {
+    }
+    else
+    {
         text = malloc(sizeof(char) * (lenght + 1));
     }
 
-    if (text == NULL) {
+    if (text == NULL)
+    {
         return -1;
     }
 
-    if (lenght >= sizeof(buffer)) {
+    if (lenght >= sizeof(buffer))
+    {
+        lenght = vsnprintf(text, lenght + 1, fmt, args);
+    }
+
+    va_end(args);
+
+    for (size_t i = 0; i < pixels_count && i < strlen(text); i++)
+    {
+        if (index[i] >= canvas->pixels_count)
+        {
+            fprintf(stderr, "Cannot set pixel %d to \"%c\": Index out of range", index[i], text[i]);
+            return -1;
+        }
+        canvas->pixels[index[i]]->c = text[i];
+    }
+
+    free(text);
+    text = NULL;
+
+    return lenght;
+}
+
+size_t termui_erase(Canvas *canvas, int index[], size_t pixels_count)
+{
+    assert(canvas && "Assertion Message: *canvas is NULL");
+
+    for (size_t i = 0; i < pixels_count; i++)
+        canvas->pixels[index[i]]->c = ' ';
+
+    return pixels_count;
+}
+
+size_t termui_insert_text_raw(Canvas *canvas, Pixel **pixels, size_t pixels_count, const char *text)
+{
+    assert(canvas && "Assertion Message: *canvas is NULL");
+    assert(text && "Assertion Message: *text is NULL");
+
+    size_t len = strlen(text);
+    for (size_t i = 0; i < pixels_count && i < len; i++)
+        pixels[i]->c = text[i];
+
+    return len;
+}
+
+size_t termui_insertf_text_raw(Canvas *canvas, Pixel **pixels, size_t pixels_count, const char *fmt, ...)
+{
+    assert(canvas && "Assertion Message: *canvas is NULL");
+    assert(fmt && "Assertion Message: *fmt is NULL");
+
+    va_list args;
+    va_start(args, fmt);
+
+    char *text;
+    char buffer[256];
+    size_t lenght;
+
+    lenght = vsnprintf(buffer, sizeof(buffer), fmt, args);
+
+    if (lenght < sizeof(buffer))
+    {
+        text = strdup(buffer);
+    }
+    else
+    {
+        text = malloc(sizeof(char) * (lenght + 1));
+    }
+
+    if (text == NULL)
+    {
+        return -1;
+    }
+
+    if (lenght >= sizeof(buffer))
+    {
         lenght = vsnprintf(text, lenght + 1, fmt, args);
     }
 
@@ -314,9 +435,9 @@ size_t termui_insertf_text(Canvas *canvas, Pixel **pixels, size_t pixels_count, 
     return lenght;
 }
 
-size_t termui_erase(Canvas *canvas, Pixel **pixels, size_t pixels_count) {
+size_t termui_erase_raw(Canvas *canvas, Pixel **pixels, size_t pixels_count)
+{
     assert(canvas && "Assertion Message: *canvas is NULL");
-    assert(pixels && "Assertion Message: **pixels is NULL");
 
     for (size_t i = 0; i < pixels_count; i++)
         pixels[i]->c = ' ';
@@ -324,20 +445,23 @@ size_t termui_erase(Canvas *canvas, Pixel **pixels, size_t pixels_count) {
     return pixels_count;
 }
 
-size_t termui_insert_textl(Canvas *canvas, unsigned short start, const char *text) {
+size_t termui_insert_textl(Canvas *canvas, unsigned short start, const char *text)
+{
     size_t len = strlen(text);
-    if (start + len > canvas->pixels_count) {
+    if (start + len > canvas->pixels_count)
+    {
         fprintf(stderr, "ERROR: Cannot insert text to canvas: Index out of range.\n");
         return -1;
     }
 
     for (size_t i = 0; i < len; i++)
-        canvas->pixels[start+i]->c = text[i];
+        canvas->pixels[start + i]->c = text[i];
 
     return len;
 }
 
-size_t termui_insertf_textl(Canvas *canvas, unsigned short start, const char *fmt, ...) {
+size_t termui_insertf_textl(Canvas *canvas, unsigned short start, const char *fmt, ...)
+{
     assert(canvas && "Assertion Message: *canvas is NULL");
     assert(fmt && "Assertion Message: *fmt is NULL");
 
@@ -350,26 +474,31 @@ size_t termui_insertf_textl(Canvas *canvas, unsigned short start, const char *fm
 
     lenght = vsnprintf(buffer, sizeof(buffer), fmt, args);
 
-    if (lenght < sizeof(buffer)) {
+    if (lenght < sizeof(buffer))
+    {
         text = strdup(buffer);
-    
-    } else {
+    }
+    else
+    {
         text = malloc(sizeof(char) * (lenght + 1));
     }
 
-    if (text == NULL) {
+    if (text == NULL)
+    {
         return -1;
     }
 
-    if (lenght >= sizeof(buffer)) {
+    if (lenght >= sizeof(buffer))
+    {
         lenght = vsnprintf(text, lenght + 1, fmt, args);
     }
 
     va_end(args);
 
-    if (start + lenght > canvas->pixels_count) {
+    if (start + lenght > canvas->pixels_count)
+    {
         fprintf(stderr, "ERROR: Cannot insert text to canvas: Index out of range.\n");
-        
+
         free(text);
         text = NULL;
 
@@ -377,7 +506,7 @@ size_t termui_insertf_textl(Canvas *canvas, unsigned short start, const char *fm
     }
 
     for (size_t i = 0; i < lenght && i < strlen(text); i++)
-        canvas->pixels[start+i]->c = text[i];
+        canvas->pixels[start + i]->c = text[i];
 
     free(text);
     text = NULL;
@@ -385,17 +514,29 @@ size_t termui_insertf_textl(Canvas *canvas, unsigned short start, const char *fm
     return lenght;
 }
 
-size_t termui_erasel(Canvas *canvas, unsigned short start, unsigned short end) {
-    if (end > canvas->pixels_count) {
+size_t termui_erasel(Canvas *canvas, unsigned short start, unsigned short end)
+{
+    if (end > canvas->pixels_count)
+    {
         fprintf(stderr, "ERROR: Cannot insert text to canvas: Index out of range.\n");
-        
+
         return -1;
     }
-    
+
     size_t len = end - start;
 
     for (size_t i = 0; i < len; i++)
-        canvas->pixels[start+i]->c = ' ';
+        canvas->pixels[start + i]->c = ' ';
 
     return len;
+}
+
+int termui_putc(Canvas *canvas, Pixel *pixel, const char c)
+{
+    assert(canvas && "Assertion Message: canvas is NULL.");
+    assert(pixel && "Assertion Message: pixel is NULL.");
+
+    pixel->c = c;
+
+    return 0;
 }

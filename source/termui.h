@@ -79,12 +79,19 @@ void termui_move_cursor(Display *display, unsigned short row, unsigned short col
 /* Reset `display->cursor` to row 0 and col 0 "home". Changes only apply on the next `__tui_renderer_write()` call */
 void termui_reset_cursor(Display *display);
 
+/* Insert text `*text` to pixels `index[]` array */
+size_t termui_insert_text(Canvas *canvas, int index[], size_t pixels_count, const char *text);
+/* Insert formatted text `*text` to pixels `index[]` array. Returns a negative value on failure */
+size_t termui_insertf_text(Canvas *canvas, int index[], size_t pixels_count, const char *fmt, ...);
+/* Erase `index[]` pixels. Returns a negative value on failure */
+size_t termui_erase(Canvas *canvas, int index[], size_t pixels_count);
+
 /* Insert text `*text` to pixels `**pixels` array */
-size_t termui_insert_text(Canvas *canvas, Pixel **pixels, size_t pixels_count, const char *text);
+size_t termui_insert_text_raw(Canvas *canvas, Pixel **pixels, size_t pixels_count, const char *text);
 /* Insert formatted text `*text` to pixels `**pixels` array. Returns a negative value on failure */
-size_t termui_insertf_text(Canvas *canvas, Pixel **pixels, size_t pixels_count, const char *fmt, ...);
+size_t termui_insertf_text_raw(Canvas *canvas, Pixel **pixels, size_t pixels_count, const char *fmt, ...);
 /* Erase `pixels_count` pixels. Returns a negative value on failure */
-size_t termui_erase(Canvas *canvas, Pixel **pixels, size_t pixels_count);
+size_t termui_erase_raw(Canvas *canvas, Pixel **pixels, size_t pixels_count);
 
 /* Insert a continuous line of text `*text` to pixels `**pixels` array. Returns a negative value on failure */
 size_t termui_insert_textl(Canvas *canvas, unsigned short start, const char *text);
@@ -92,5 +99,7 @@ size_t termui_insert_textl(Canvas *canvas, unsigned short start, const char *tex
 size_t termui_insertf_textl(Canvas *canvas, unsigned short start, const char *fmt, ...);
 /* Erase a continuous line of `pixels_count` pixels. Returns a negative value on failure */
 size_t termui_erasel(Canvas *canvas, unsigned short start, unsigned short end);
+
+int termui_putc(Canvas *canvas, Pixel *pixel, const char c);
 
 #endif // __TERM_UI_H__

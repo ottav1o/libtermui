@@ -27,13 +27,14 @@
  *    CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  *    OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  *    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ */
 
 #include "cursor.h"
 
 #include <stdio.h>
 
-void __tui_cursor_move(unsigned short row, unsigned short col, Cursor *cursor) {
+void __tui_cursor_move(unsigned short row, unsigned short col, Cursor *cursor)
+{
     cursor->row = row;
     cursor->col = col;
 }

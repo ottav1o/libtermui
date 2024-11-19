@@ -27,7 +27,7 @@
  *    CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  *    OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  *    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ */
 
 #include "canvas.h"
 
@@ -35,9 +35,11 @@
 #include <stdlib.h>
 #include <assert.h>
 
-Canvas * __tui_create_canvas(Pixel **pixels, size_t pcount) {
+Canvas * __tui_create_canvas(Pixel **pixels, size_t pcount)
+{
     Canvas *canvas = malloc(sizeof(Canvas));
-    if (canvas == NULL) {
+    if (canvas == NULL)
+    {
         fprintf(stderr, "ERROR: Cannot allocate memory for canvas.\n");
         return NULL;
     }
@@ -48,10 +50,12 @@ Canvas * __tui_create_canvas(Pixel **pixels, size_t pcount) {
     return canvas;
 }
 
-void __tui_destroy_canvas(Canvas *canvas) {
+void __tui_destroy_canvas(Canvas *canvas)
+{
     assert(canvas && "*canvas is NULL");
 
-    if (canvas->pixels) {
+    if (canvas->pixels)
+    {
         free(canvas->pixels);
         canvas->pixels = NULL;
     }
