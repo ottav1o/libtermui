@@ -14,7 +14,9 @@ To install all the development headers, run `make install` with root privileges.
 Copy and paste `SOURCE_DIR/build/libtermui.a` somewhere in your project and add `-Lpath_to_the_directory_where_is_located_libtermui.a` and `-ltermui` to your compile flags. Good luck!
 
 ## Windows / Not Unix-like OSes
-### Not officially supported. libtermui uses `unistd.h` and others unix-like libraries to get the things done. If you really want to use libtermui, try WSL or something. 
+### Not officially supported. libtermui uses `unistd.h` and others unix-like libraries to get the things done. If you really want to use libtermui, try WSL or something.
+
+## Docs
 
 ---
 sorry for my bad english :) it's not my main language :>
