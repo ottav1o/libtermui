@@ -33,6 +33,7 @@
 #include <stdlib.h>
 
 #include "../source/termui.h"
+#include "../source/utils.h"
 
 int main(void) {
     termui_init();
@@ -51,10 +52,12 @@ int main(void) {
 
     Canvas *canv = termui_create_canvas(pixels, 13);
     termui_insert_textl(&display->main_canvas, 0, "Hello World!");
-    puts("Hello");
     termui_insertf_textl(&display->main_canvas, 13, "This is a test: Terminal size: Rows: %d, Width: %d", display->height, display->width);
     termui_insert_textl(&display->main_canvas, 1*display->width, termui_version());
-    termui_insert_text(&display->main_canvas, canv->pixels, 10, "It works!");
+
+    termui_insert_text_raw(&display->main_canvas, termui_utils_gen_pixels(&display->main_canvas, 100, 108, 2), 8, "bar FOO");
+
+    termui_putc(canv, canv->pixels[1], 'L');
 
     termui_destroy_canvas(canv);
     termui_renderer_present(display);
